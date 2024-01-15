@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+local_settings.py
+
+# Database
+db.sqlite3
+*.sqlite3
+*.db
+
+# Static files (usually collected by Django's `collectstatic` management command)
+static/
+
+# Media files (user-uploaded content)
+
+
+# Virtual environment
+venv/
+venv.bak/
+env/
+ENV/
+
+# Temporary files
+*.log
+*.tmp
+
+# Compiled Python files
+*.pyc
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Dependency directories
+env/
+/.venv/
+
+# User-specific files
+*.DS_Store
+Thumbs.db
+
+# Ignore local development configurations
+.env
