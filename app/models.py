@@ -65,10 +65,18 @@ class Order(models.Model):
     item=models.ForeignKey(Item,on_delete=models.CASCADE)
     odered_at=models.DateField(blank=True,null=True)
     delivery_date=models.DateField()
+    howmany=models.IntegerField(null=True)
+    totalcolst=models.FloatField(blank=True,null=True)
+    
+    
+    def calculateprice(self):
+        return self.item.price * self.howmany
     
     def save(self,*args,**kwargs):
         if not self.odered_at:
             self.odered_at=timezone.now() + timezone.timedelta(hours=6)
+        
+        self.totalcolst=self.calculateprice()   
         super().save(*args,**kwargs)
         
     def __str__(self):
