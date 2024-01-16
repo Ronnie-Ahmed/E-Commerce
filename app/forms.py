@@ -2,6 +2,9 @@ from django import forms
 from .models import Buyer,Order,Category,Item,ItemImage
 from django.contrib.auth.models import User
 
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.forms.widgets import PasswordInput,TextInput
+
 class BuyerForm(forms.ModelForm):
     class Meta:
         model=Buyer
@@ -22,3 +25,13 @@ class BuyerForm(forms.ModelForm):
 #         model=Item
 #         fields='__all__'
 # class ItemImageForm(forms.ModelForm):
+
+
+class CreateUser(UserCreationForm):
+    class Meta:
+        model=User
+        fields=['username','email','password1','password2']
+        
+class LoginForm(AuthenticationForm):
+    username=forms.CharField(widget=TextInput)
+    password=forms.CharField(widget=PasswordInput)

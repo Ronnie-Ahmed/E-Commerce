@@ -1,0 +1,6 @@
+{% extends "app/base.html" %} {% block content %}
+
+<h1>Home</h1>
+{% if user is not None %}
+<h1>{{user.username}}, you are logged in!</h1>
+{% endif %} {% endblock content %}
