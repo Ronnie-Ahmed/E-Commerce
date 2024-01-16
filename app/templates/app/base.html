@@ -44,6 +44,8 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
+           
+   
             <li class="nav-item">
               <a class="nav-link" href="#">Link</a>
             </li>
@@ -58,20 +60,29 @@
                 Log
               </a>
               <ul class="dropdown-menu">
-                {% if request.user.is_authenticated %}
+               
+
+                {% if request.user.is_superuser %}
+                 <li >
+                   <a class="dropdown-item"  href="{% url "superuser" %}">SUPERUSER</a>
+                  <a class="dropdown-item" href="{% url "Log_out" %}">LOG OUT</a>
+                  <a class="dropdown-item" href="{% url "UserProfile" %}">{{request.user.username}}</a>
+                </li>
+
+                 {% elif request.user.is_authenticated %}
                 <li>
                   <a class="dropdown-item" href="{% url "Log_out" %}">LOG OUT</a>
                   <a class="dropdown-item" href="{% url "UserProfile" %}">{{request.user.username}}</a>
                 </li>
              
                 {% else %}
-                   <li><a class="dropdown-item" href="{% url "Login" %}">Log In</a></li>
-                <li><a class="dropdown-item" href="{% url "SignUp" %}">Sign Up</a></li>
-                 
+                   <li><a class="dropdown-item" href="{% url "Login" %}">Log In</a>
+                    <a class="dropdown-item" href="{% url "SignUp" %}">Sign Up</a>
+                   </li>
+                
 
                 {% endif %}
-                
-                <li><hr class="dropdown-divider" /></li>
+             
                
               </ul>
             </li>

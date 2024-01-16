@@ -4,6 +4,8 @@ from django.contrib.auth.models import auth
 from .forms import CreateUser,LoginForm,BuyerForm
 from .models import Buyer,Item,ItemImage,Order,Category
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from .utils import check_superuser
 
 # Create your views here.
 
@@ -66,4 +68,8 @@ def Log_out(request):
 
 def UserProfile(request):
     return render(request,'app/userprofile.html')
-    
+
+
+@check_superuser
+def superuser(request):
+    return HttpResponse("Valid")
