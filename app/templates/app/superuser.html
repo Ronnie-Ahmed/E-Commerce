@@ -1,0 +1,16 @@
+{% extends "app/base.html" %} {% block content %}
+<h1>Item</h1>
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+  {% csrf_token %} {{ formitem.as_p }}
+  <input required name="image_url" type="file" multiple />
+
+  <input type="submit" name="item_submit" value="Submit Item" />
+</form>
+<br></br>
+<h1>Category</h1>
+<form method="post" autocomplete="off">
+  {% csrf_token %} {{ formcategory.as_p }}
+
+  <input type="submit" name="category_submit" value="Submit Category" />
+</form>
+{% endblock content %}

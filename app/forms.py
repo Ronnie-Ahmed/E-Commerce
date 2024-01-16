@@ -10,21 +10,21 @@ class BuyerForm(forms.ModelForm):
         model=Buyer
         fields='__all__'
         exclude=['user','dateJoined']
-# class OrderForm(forms.ModelForm):
-#     class Meta:
-#         model=Order
-#         fields='__all__'
-#         exclude=['user','dateOrdered']
-# class CategoryForm(forms.ModelForm):
-#     class Meta:
-#         model=Category
-#         fields='__all__'
-#         exclude=['slug']
-# class ItemForm(forms.ModelForm):
-#     class Meta:
-#         model=Item
-#         fields='__all__'
-# class ItemImageForm(forms.ModelForm):
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model=Order
+        fields='__all__'
+        exclude=['user','dateOrdered']
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model=Category
+        fields='__all__'
+        exclude=['slug']
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model=Item
+        fields='__all__'
+        
 
 
 class CreateUser(UserCreationForm):
