@@ -1,0 +1,32 @@
+{% extends "app/base.html" %} {% block content %} {% load static %}
+
+<div class="container mt-5">
+  <h1 class="display-4 mb-4">Item Information</h1>
+
+  {% if user is not None %}
+  <div class="card mb-5">
+    <div class="card-body">
+      <h2 class="card-title">{{ item.name }}</h2>
+      <p class="card-text">Price: {{ item.price }}</p>
+      <p class="card-text">Description: {{ item.description }}</p>
+      <p class="card-text">Category: {{ item.category }}</p>
+    </div>
+  </div>
+
+  <h1 class="display-4 mb-4">Item Images</h1>
+  <div class="row">
+    {% for image in images %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img src="{{ image.image_url.url }}" class="card-img-top" alt="Image" />
+        <div class="card-body">
+          <p class="card-text">Image Description: {{ image.description }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

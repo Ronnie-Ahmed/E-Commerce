@@ -1,6 +1,54 @@
-{% extends "app/base.html" %} {% block content %}
+{% extends "app/base.html" %} {% block content %} {% load static %}
 
-<h1>Home</h1>
-{% if user is not None %}
-<h1>{{user.username}}, you are logged in!</h1>
-{% endif %} {% endblock content %}
+<div class="container">
+  <h1>Home</h1>
+
+  {% if user is not None %}
+  <h1>{{ user.username }}, you are logged in!</h1>
+
+  <!-- Category Filter Button Group -->
+  <div class="btn-group" role="group" aria-label="Category Filter">
+    {% for category in categories %}
+    <a
+      href="{% url 'home' %}?category={{ category }}"
+      class="btn btn-outline-primary"
+      >{{ category }}</a
+    >
+    {% endfor %}
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">None</a>
+  </div>
+
+  <div class="row mt-3">
+    {% for item in items %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <img src="{{ item.image.url }}" class="card-img-top" alt="Image" />
+        <div class="card-body">
+          <h5 class="card-title">{{ item.name }}</h5>
+          <p class="card-text">Price: {{ item.price }}</p>
+          <p class="card-text">Description: {{ item.description }}</p>
+          <p class="card-text">Category: {{ item.category }}</p>
+          <a href="{% url 'viewitem' item.id %}" class="btn btn-primary"
+            >View</a
+          >
+
+          <form method="post">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="btn btn-success"
+              name="addtocart"
+              value="{{ item.id }}"
+            >
+              Add To Cart
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock content %}

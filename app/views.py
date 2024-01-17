@@ -1,26 +1,44 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import auth
-from .forms import CreateUser,LoginForm,BuyerForm,CategoryForm,ItemForm,OrderForm
+from .forms import  CreateUser,LoginForm,BuyerForm,CategoryForm,ItemForm,OrderForm
 from .models import Buyer,Item,ItemImage,Order,Category
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from .utils import check_superuser
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 
 def home(request):
+    category=request.GET.get('category')
+    categories=Category.objects.all()
     
-    if request.user.is_authenticated:
-        user=request.user
+    if category is not None:
+        items=Item.objects.filter(category__name__iexact=category)
     else:
-        user=None
+        items=Item.objects.all()
+        
+    if request.method=='POST' and request.user.is_authenticated:
+        user=request.user
+        if 'addtocart' in request.POST:
+            item_id = request.POST.get('addtocart')
+            item = Item.objects.get(id=item_id)
+            buyer, created = Buyer.objects.get_or_create(user=request.user)
+            buyer.cart.add(item)
+            return redirect('home')
+    else:
+        None
+    
+    
+  
     
     context={
-            'user':user
+            'user':request.user,
+            'items':items,
+            'categories':categories
         }
-    
-   
         
     return render(request,'app/index.html',context)
 
@@ -51,6 +69,9 @@ def SignUp(request):
         if form.is_valid():
             current_user=form.save(commit=False)
             form.save()
+            username=form.cleaned_data['username']
+            email=form.cleaned_data['email']
+            Buyer.objects.create(name=username,email=email,user=current_user)
             return redirect('home')
     else:
         form=CreateUser()
@@ -67,7 +88,18 @@ def Log_out(request):
 
 
 def UserProfile(request):
-    return render(request,'app/userprofile.html')
+    buyer=Buyer.objects.get(user=request.user)
+    if request.method=='POST':
+        if "pic" in request.POST:
+            imagefile=request.FILES.get('profile_pic')
+            buyer.profile_pic=imagefile
+            buyer.save()
+        
+    context={
+        'buyer':buyer
+    }
+    
+    return render(request,'app/userprofile.html',context)
 
 
 @check_superuser
@@ -96,5 +128,15 @@ def superuser(request):
         'formcategory':formcategory
     }
     
-    
     return render(request,'app/superuser.html',context)
+
+
+def viewitem(request,pk):
+    item=Item.objects.get(id=pk)
+    images=ItemImage.objects.filter(item=item.id)
+    context={
+        'item':item,
+        'images':images
+    }
+    return render(request,'app/viewitem.html',context)
+

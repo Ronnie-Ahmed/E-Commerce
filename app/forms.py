@@ -1,6 +1,8 @@
 from django import forms
 from .models import Buyer,Order,Category,Item,ItemImage
 from django.contrib.auth.models import User
+from django.forms import TextInput, NumberInput, Textarea, FileInput
+
 
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from django.forms.widgets import PasswordInput,TextInput
@@ -22,8 +24,19 @@ class CategoryForm(forms.ModelForm):
         exclude=['slug']
 class ItemForm(forms.ModelForm):
     class Meta:
-        model=Item
-        fields='__all__'
+        model = Item
+        fields = '__all__'
+        widgets = {
+            'name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter item name'}),
+            'price': NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter item price'}),
+            'description': Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter item description'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'image': FileInput(attrs={'class': 'form-control'}),
+        } 
+        
+        labels={
+            'image':'Add Image'
+        }
         
 
 

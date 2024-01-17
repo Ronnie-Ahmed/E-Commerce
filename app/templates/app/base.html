@@ -27,7 +27,7 @@
    
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="{% url "home" %}">Navbar</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -42,7 +42,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url "home" %}">Home</a>
             </li>
            
    
@@ -66,7 +66,6 @@
                  <li >
                    <a class="dropdown-item"  href="{% url "superuser" %}">SUPERUSER</a>
                   <a class="dropdown-item" href="{% url "Log_out" %}">LOG OUT</a>
-                  <a class="dropdown-item" href="{% url "UserProfile" %}">{{request.user.username}}</a>
                 </li>
 
                  {% elif request.user.is_authenticated %}
