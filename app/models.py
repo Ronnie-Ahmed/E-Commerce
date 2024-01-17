@@ -45,7 +45,7 @@ class Buyer(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=100)
-    price = models.FloatField()
+    price = models.FloatField(null=True)
     description = models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image=models.ImageField(upload_to='images/',null=True)
@@ -72,7 +72,7 @@ class Order(models.Model):
     buyer=models.ForeignKey(Buyer,on_delete=models.CASCADE)
     item=models.ForeignKey(Item,on_delete=models.CASCADE)
     odered_at=models.DateField(blank=True,null=True)
-    delivery_date=models.DateField()
+    delivery_date=models.DateField(null=True)
     howmany=models.IntegerField(null=True)
     totalcolst=models.FloatField(blank=True,null=True)
     

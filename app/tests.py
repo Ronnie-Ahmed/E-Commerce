@@ -1,17 +1,88 @@
 from django.test import TestCase,Client
-from .models import Buyer,Category,Item,Order
+from .models import Buyer,Category,Item,Order,ItemImage,CartItem
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password,mask_hash
+from django.urls import reverse
 # Create your tests here.
 
 class TestModel(TestCase):
-    def test_1(self):
+    def setUp(self):
         try:
-            # emails=input('Enter your email: ')
-            user=User.objects.create_user(username='ronnie',password='ronnie')
-            buyer=Buyer.objects.create(name='Ronnie',email='rksraisul@gmail.com',user=user)
-            self.assertEqual(str(buyer),'Ronnie')
-            self.assertEqual(buyer.email,"rksraisul@gmail.com")
-            self.assertTrue(isinstance(buyer,User))
+            self.user = User.objects.create_user(username='ronnie', password='ronnie')
+            self.buyer = Buyer.objects.create(name='Ronnie', email='rksraisul@gmail.com', user=self.user)
+            self.category = Category.objects.create(name="Anime", slug="Anime", description="This is the anime Category")
+            self.item = Item.objects.create(name="Item1", price=2.2, description="This is Item1", category=self.category)
+            self.item_image = ItemImage.objects.create(item=self.item, image_url='images/40718.jpg')
+            self.order = Order.objects.create(buyer=self.buyer, item=self.item,  delivery_date=timezone.now(), howmany=2)
+            self.cart_item = CartItem.objects.create(buyer=self.buyer, item=self.item, quantity=3)
+            # self.order = Order.objects.create(buyer=self.buyer, item=self.item)
+
         except Exception as e:
             self.fail(e)
 
+    def test_instances(self):
+        try:
+            self.assertTrue(isinstance(self.user,User))
+            self.assertTrue(isinstance(self.buyer,Buyer))
+            self.assertTrue(isinstance(self.category,Category))
+            self.assertTrue(isinstance(self.item,Item))
+            self.assertTrue(isinstance(self.item_image,ItemImage))
+            self.assertTrue(isinstance(self.order,Order))
+            self.assertTrue(isinstance(self.cart_item,CartItem))
+        except Exception as e:
+            self.fail(e)
+    def test_user(self):
+        try:
+            self.assertEqual(self.user.username,"ronnie")
+            self.assertTrue(self.user.check_password("ronnie"))
+            # self.assertEqual(self.user.password,make_password("ronnie"))
+            # print(make_password("ronnie"))
+        except Exception as e:
+            self.fail(e)
+            
+    def test_buyer(self):
+        try:
+            self.assertEqual(self.buyer.name,"Ronnie")
+            self.assertEqual(self.buyer.email,"rksraisul@gmail.com")
+            self.assertEqual(self.buyer.user,self.user)
+        except Exception as e:
+            self.fail(e)
+    def test_order(self):
+        try:
+            self.assertEqual(self.order.buyer,self.buyer)
+            self.assertEqual(self.order.item,self.item)
+            # self.assertEqual(self.order.delivery_date,timezone.now())
+            self.assertEqual(self.order.howmany,2)
+        except Exception as e:
+            self.fail(e)
+            
+class TestViews(TestCase):
+    def setUp(self):
+        try:
+            self.client=Client()
+            self.index_url=reverse("home")
+            self.login_url=reverse("Login")
+            self.signup_url=reverse("SignUp")
+            # item=Item.objects.first()
+            # self.viewitem_pk=item.id
+            # self.viewitem_url=reverse("viewitem",args=[self.viewitem_pk])
+        except Exception as e:
+            self.fail(e)
+        
+        
+    def test_home(self):
+        response=self.client.get(self.index_url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,"app/index.html")
+        
+    def test_login(self):
+        response=self.client.get(self.login_url)
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response,"app/login.html")
+        
+    def test_viewitem(self):
+        # response=self.client.get(self.viewitem_url)
+        # print(response)
+        pass
+        

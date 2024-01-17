@@ -1,2 +1,7 @@
+from app.models import Item
 def run():
-    print('Do the scripting here')
+    items=Item.objects.all()
+    for item in items:
+        print(item.id)
+    
+    
