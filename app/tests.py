@@ -30,6 +30,12 @@ class TestModel(TestCase):
             self.assertTrue(isinstance(self.item_image,ItemImage))
             self.assertTrue(isinstance(self.order,Order))
             self.assertTrue(isinstance(self.cart_item,CartItem))
+            self.assertTrue(str(self.buyer),"Ronnie")
+            self.assertTrue(str(self.category),"Anime")
+            self.assertTrue(str(self.item),"Item1")
+            self.assertTrue(str(self.order),f"Item= {self.item.name}  By= {self.buyer}")
+            self.assertTrue(str(self.item_image),self.item.name)
+            self.assertTrue(str(self.cart_item),f"{self.buyer} - {self.item} - Quantity: {self.cart_item.quantity}")
         except Exception as e:
             self.fail(e)
     def test_user(self):
