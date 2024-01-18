@@ -86,49 +86,55 @@ def Log_out(request):
     logout(request)
     return redirect('home')
 
-
+@login_required(login_url='Login')
 def UserProfile(request):
-    buyer=Buyer.objects.get(user=request.user)
-    if request.method=='POST':
-        if "pic" in request.POST:
-            imagefile=request.FILES.get('profile_pic')
-            buyer.profile_pic=imagefile
-            buyer.save()
+    try: 
+        buyer=Buyer.objects.get(user=request.user)
+        if request.method=='POST':
+            if "pic" in request.POST:
+                imagefile=request.FILES.get('profile_pic')
+                buyer.profile_pic=imagefile
+                buyer.save()
+            
+        context={
+            'buyer':buyer
+        }
         
-    context={
-        'buyer':buyer
-    }
-    
-    return render(request,'app/userprofile.html',context)
+        return render(request,'app/userprofile.html',context)
+    except Exception as e:
+        raise HttpResponse("Error Happened")
 
 
 @check_superuser
 def superuser(request):
-    if request.method=='POST':
-        if 'item_submit' in request.POST:
-            form_item=ItemForm(request.POST,request.FILES)
-            images = request.FILES.getlist('image_url')
-            if form_item.is_valid():  
-                item=form_item.save()  
-            for image in images:
-                ItemImage.objects.create(item=item,image_url=image)
-                
-            return redirect('home')
-        if 'category_submit' in request.POST:
-            form_category=CategoryForm(request.POST)
-            if form_category.is_valid():
-                form_category.save()
+    try:
+        if request.method=='POST':
+            if 'item_submit' in request.POST:
+                form_item=ItemForm(request.POST,request.FILES)
+                images = request.FILES.getlist('image_url')
+                if form_item.is_valid():  
+                    item=form_item.save()  
+                for image in images:
+                    ItemImage.objects.create(item=item,image_url=image)
+                    
                 return redirect('home')
-    else:
-        formitem=ItemForm()
-        formcategory=CategoryForm
+            if 'category_submit' in request.POST:
+                form_category=CategoryForm(request.POST)
+                if form_category.is_valid():
+                    form_category.save()
+                    return redirect('home')
+        else:
+            formitem=ItemForm()
+            formcategory=CategoryForm
+            
+        context={
+            'formitem':formitem,
+            'formcategory':formcategory
+        }
         
-    context={
-        'formitem':formitem,
-        'formcategory':formcategory
-    }
-    
-    return render(request,'app/superuser.html',context)
+        return render(request,'app/superuser.html',context)
+    except Exception as e:
+        raise HttpResponse("Error Happened")
 
 
 def viewitem(request,pk):

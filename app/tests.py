@@ -60,10 +60,16 @@ class TestModel(TestCase):
 class TestViews(TestCase):
     def setUp(self):
         try:
+            
             self.client=Client()
             self.index_url=reverse("home")
             self.login_url=reverse("Login")
             self.signup_url=reverse("SignUp")
+            self.user = User.objects.create_user(username='rony', password='rony')            
+            self.superuser=User.objects.create_superuser(username="ronnie",password="ronnie")
+            self.buyer = Buyer.objects.create(name='rony', email='rksraisul@gmail.com', user=self.user)
+            self.userprofile=reverse("UserProfile")
+            self.superuser_url=reverse("superuser")
             # item=Item.objects.first()
             # self.viewitem_pk=item.id
             # self.viewitem_url=reverse("viewitem",args=[self.viewitem_pk])
@@ -86,3 +92,39 @@ class TestViews(TestCase):
         # print(response)
         pass
         
+    def test_userprofile(self):
+        try: 
+            self.client.login(username="rony",password="rony")
+            response=self.client.get(self.userprofile)
+            self.assertEqual(response.status_code,200)
+            self.assertTemplateUsed(response,"app/userprofile.html")
+        except Exception as e:
+            self.fail(e)
+    def test_not_userprofile(self):
+        try:
+            self.client.login(username="rony",password="rony")
+            self.client.logout()
+            response=self.client.get(self.userprofile)
+            self.assertNotEqual(response.status_code,200)
+            self.assertTemplateNotUsed(response,"app/userprofile.html")
+        except Exception as e:
+            self.fail(e)
+    
+    def test_super_user(self):
+        try: 
+            self.client.login(username="ronnie",password="ronnie")
+            response=self.client.get(self.superuser_url)
+            self.assertEqual(response.status_code,200)
+            self.assertTemplateUsed(response,"app/superuser.html")
+        except Exception as e:
+            self.fail(e)
+    def test_Not_super_user(self):
+        try: 
+            self.client.login(username="ronnie",password="ronnie")
+            self.client.logout()
+            response=self.client.get(self.superuser_url)
+            self.assertNotEqual(response.status_code,200)
+            self.assertTemplateNotUsed(response,"app/superuser.html")
+        except Exception as e:
+            self.fail(e)
+    
