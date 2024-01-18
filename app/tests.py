@@ -133,4 +133,38 @@ class TestViews(TestCase):
             self.assertTemplateNotUsed(response,"app/superuser.html")
         except Exception as e:
             self.fail(e)
+            
+class TestHomeView(TestCase):
+    def setUp(self):
+        self.client=Client()
+        self.index_url=reverse("home")
+        self.user=User.objects.create_user(username="ronnie",password="ronnie")
+        self.category = Category.objects.create(name="Anime", slug="Anime", description="This is the anime Category")
+        self.category2 = Category.objects.create(name="Tech", slug="Tech", description="This is the anime Category")
+        self.buyer = Buyer.objects.create(name='Ronnie', email='rksraisul@gmail.com', user=self.user)
+        self.item1 = Item.objects.create(name="Item1", price=2.2, description="This is Item1", category=self.category)
+        self.item2 = Item.objects.create(name="Item2", price=2.2, description="This is Item1", category=self.category)
+        self.item3 = Item.objects.create(name="Item3", price=2.2, description="This is Item1", category=self.category)
+        self.item4 = Item.objects.create(name="Item4", price=2.2, description="This is Item1", category=self.category2)
+        self.item_image1 = ItemImage.objects.create(item=self.item1, image_url='images/40718.jpg')
+        self.item_image2= ItemImage.objects.create(item=self.item2, image_url='images/40718.jpg')
+        self.item_image3 = ItemImage.objects.create(item=self.item3, image_url='images/40718.jpg')
+        self.item_image4 = ItemImage.objects.create(item=self.item4, image_url='images/40718.jpg')
+
+
+    def test1(self):
+        self.client.login(username="ronnie",password="ronnie")
+        self.assertEqual(self.item1.name,"Item1")
+        response=self.client.post(self.index_url,data={'addtocart':self.item1.id})
+        self.assertEqual(response.status_code,302)
     
+    def test_category(self):
+        try: 
+            self.client.login(username="ronnie",password="ronnie")
+            response=self.client.get(self.index_url)
+        except Exception as e:
+            self.fail(e)
+        # self.assertEqual(response.status_code,200)
+        # items=response.context['items']
+        # self.assertIn(self.item1,items)
+        
