@@ -37,11 +37,14 @@ def home(request):
     
     
   
-    
+    paginator = Paginator(items, 2)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     context={
             'user':request.user,
             'items':items,
-            'categories':categories
+            'categories':categories,
+            'page_obj':page_obj
         }
         
     return render(request,'app/index.html',context)
@@ -176,3 +179,15 @@ class ListViewPage(ListView):
     
     
     
+def index2(request):
+    items=Item.objects.all()
+    paginator = Paginator(items, 1)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context={
+        'items':items,
+        'page_obj':page_obj,
+        'paginator':paginator
+    }
+    return render(request,'app/index2.html',context)

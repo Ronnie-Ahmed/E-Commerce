@@ -12,5 +12,6 @@ urlpatterns = [
     path('viewitem/<str:pk>',views.viewitem,name='viewitem'),
     path("testpage/<int:pk>",TestPage.as_view(),name="testpage"),
     path("listviewpage/",ListViewPage.as_view(),name="listviewpage"),
+    path("index2/",views.index2,name="index2"),
     
 ]

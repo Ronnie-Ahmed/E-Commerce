@@ -19,19 +19,7 @@
     </div>
 {% endfor %} 
 
-{% for contact in page_obj %}
-    {# Each "contact" is a Contact model object. #}
-    {{ contact.full_name|upper }}<br>
-    ...
-{% endfor %}
 
-{% for contact in page_obj %}
-    {# Each "contact" is a Contact model object. #}
-    <div class="contact">
-        {{ contact.full_name|upper }}<br>
-        <!-- Add more details or styling as needed -->
-    </div>
-{% endfor %}
 
 <div class="container mt-4">
     <nav aria-label="Page navigation">

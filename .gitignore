@@ -22,7 +22,7 @@ venv/
 venv.bak/
 env/
 ENV/
-
+media/
 # Temporary files
 *.log
 *.tmp
