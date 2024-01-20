@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from .utils import check_superuser
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from django.views.generic import DetailView,ListView
 
 
@@ -165,7 +166,13 @@ class TestPage(DetailView):
         context['categories']=Category.objects.all()
         return context
 class ListViewPage(ListView):
-    mode=Item
+    queryset=Item.objects.all()
     template_name="app/listviewpage.html"
     context_object_name="object"
-    paginate_by=3
+    paginate_by=1
+    
+    # def get_queryset(self):
+    #     return Item.objects.all()
+    
+    
+    
