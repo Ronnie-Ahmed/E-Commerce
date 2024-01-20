@@ -1,3 +1,5 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import auth
@@ -7,6 +9,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from .utils import check_superuser
 from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView,ListView
 
 
 # Create your views here.
@@ -146,3 +149,23 @@ def viewitem(request,pk):
     }
     return render(request,'app/viewitem.html',context)
 
+
+
+class TestPage(DetailView):
+    model=Item
+    template_name="app/testpage.html"
+    context_object_name="object"
+    
+    def get_queryset(self):
+        item=Item.objects.select_related("category")
+        return item
+    
+    def get_context_data(self, **kwargs) :
+        context= super().get_context_data(**kwargs)
+        context['categories']=Category.objects.all()
+        return context
+class ListViewPage(ListView):
+    mode=Item
+    template_name="app/listviewpage.html"
+    context_object_name="object"
+    paginate_by=3

@@ -1,0 +1,13 @@
+{% extends "app/base.html" %} {% block content %} {% load static %}
+
+<h1>This is the test page</h1>
+<h1>Name: {{object.name}}</h1>
+<h1>Price: {{object.price}}</h1>
+<h1>Description: {{object.description}}</h1>
+
+<img src="{{object.image.url}}" width="250" height="250" alt="" />
+
+{% for category in categories %}
+<h1>Category: {{category.name}}</h1>
+
+{% endfor %} {% endblock content %}

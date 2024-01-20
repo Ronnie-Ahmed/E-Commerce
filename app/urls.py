@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import TestPage,ListViewPage
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -9,4 +10,7 @@ urlpatterns = [
     path('userprofile/',views.UserProfile,name='UserProfile'),
     path('superuser/',views.superuser,name='superuser'),
     path('viewitem/<str:pk>',views.viewitem,name='viewitem'),
+    path("testpage/<int:pk>",TestPage.as_view(),name="testpage"),
+    path("listviewpage/",ListViewPage.as_view(),name="listviewpage"),
+    
 ]
